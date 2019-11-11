@@ -7,6 +7,7 @@ from .serializers import (PostSerializer, CreateUserSerializer,
 )
 from knox.models import AuthToken 
 from memodies.models import Post 
+from django.contrib.auth.models import User
 # from serializers import PostSerializer
 # Create your views here.
 
@@ -18,11 +19,15 @@ class PostViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Post.objects.all().order_by("-created_at")
 
-    # def perform_create(self, serializer):
-    #     serializer.save(owner = self.request.user)
+    def perform_create(self, serializer):
+        serializer.save(owner = self.request.user)
+        print(self.request.user)
 
 
 
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 class RegistrationAPI(generics.GenericAPIView):
     serializer_class = CreateUserSerializer

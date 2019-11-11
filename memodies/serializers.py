@@ -4,11 +4,21 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username')
+
 class PostSerializer(serializers.HyperlinkedModelSerializer):
+    owner = serializers.CharField(source = 'owner.username', read_only = True)
     class Meta:
         model = Post
-        fields = ('id', 'artist', 'title', 'memo', 'album','preview','artwork')
+       
+        # owner = serializers.ReadOnlyField(source='owner.username')
+        fields = ('id', 'title', 'artist', 'album', 'memo', 'artwork', 'preview', 'owner')
+        
     
+  
         
 class CreateUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -23,10 +33,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
         return user
 
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id', 'username')
+
 
 class LoginUserSerializer(serializers.Serializer):
     username = serializers.CharField()
