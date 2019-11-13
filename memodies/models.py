@@ -18,4 +18,13 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
-    
+
+class Playlist(models.Model):
+    id = models.AutoField(primary_key=True)
+    owner = models.ForeignKey(User, related_name="playlists",
+    on_delete = models.CASCADE, blank=False, default=None)
+    track = models.ForeignKey(Post, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    class Meta:
+            unique_together = ('owner', 'track')

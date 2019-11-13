@@ -4,9 +4,10 @@ from rest_framework.response import Response
 from .serializers import (PostSerializer, CreateUserSerializer,
     UserSerializer,
     LoginUserSerializer,
+    PlaylistSerializer,
 )
 from knox.models import AuthToken 
-from memodies.models import Post 
+from memodies.models import Post, Playlist
 from django.contrib.auth.models import User
 # from serializers import PostSerializer
 # Create your views here.
@@ -72,3 +73,25 @@ class UserAPI(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
+
+class PlaylistViewSet(viewsets.ModelViewSet):
+    queryset = Playlist.objects.all()
+    serializer_class = PlaylistSerializer
+    
+    def get_queryset(self):
+        return Playlist.objects.all().order_by("-created_at")
+
+    def perform_create(self, serializer):
+        post = Post.objects.get(id=self.request.data['track'])
+        serializer.save(owner = self.request.user, track=post)
+       
+
+
+class PlaylistFilter(generics.ListAPIView):
+    serializer_class = PlaylistSerializer
+
+    def get_queryset(self):
+        user = self.kwargs['username']
+        return Playlist.objects.filter(owner=user).order_by("-created_at")
+
+    

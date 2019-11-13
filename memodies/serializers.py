@@ -1,4 +1,4 @@
-from memodies.models import Post
+from memodies.models import Post, Playlist
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
@@ -44,3 +44,18 @@ class LoginUserSerializer(serializers.Serializer):
         if user and user.is_active:
             return user
         raise serializers.ValidationError("Unable to log in with provided credentials.")
+
+
+class PlaylistSerializer(serializers.ModelSerializer):
+    # owner = serializers.CharField(source = 'owner.username', read_only = True)
+    owner = UserSerializer(read_only=True)
+    track = PostSerializer(read_only=True)
+    class Meta:
+        model = Playlist
+        fields = ('id', 'owner', 'track')
+
+    # def perform_create(self, validated_data):
+    #     post = Post.objects.get(pk = validated_data)
+    #     playlist = Playlist.objects.create(post)
+    #     playlist.save()
+    #     return playlist        
