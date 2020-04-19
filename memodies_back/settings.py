@@ -68,7 +68,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-             os.path.join(BASE_DIR, 'frontend', 'build'),
+            os.path.join(BASE_DIR, 'frontend', 'build'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -137,14 +137,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*', 'memodies-dev.us-west-2.elasticbeanstalk.com']
 
 CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ORIGIN_WHITELIST = (
-       'http://localhost:3000',    #React 도메인
-       'http://localhost:8000', 
-         
+    'http://localhost:3000',  # React 도메인
+    'http://localhost:8000',
+
 )
